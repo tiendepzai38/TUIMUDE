@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Việt Nam City - Túi Mù Free</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: #0B0F1C;
+            color: #E8EDF5;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(18, 24, 38, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 200, 70, 0.25);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            background: linear-gradient(120deg, #FFD966, #C9A03D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            color: #8E9AAF;
+            margin-top: 4px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 200, 70, 0.1);
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+        }
+
+        .user-info span {
+            color: #FFD966;
+            font-weight: 600;
+        }
+
+        .user-badge {
+            background: #FFD966;
+            color: #0B0F1C;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: rgba(220, 53, 69, 0.8);
+            border: none;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #DC3545;
+        }
+
+        .limit-box {
+            background: rgba(255, 200, 70, 0.12);
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 200, 70, 0.3);
+        }
+
+        .limit-box span {
+            color: #FFD966;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .timer-box {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-family: monospace;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Auth Container */
+        .auth-container {
+            background: #131A2C;
+            border-radius: 32px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 200, 70, 0.2);
+            max-width: 450px;
+            margin: 2rem auto;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .auth-tab {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #8E9AAF;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active {
+            color: #FFD966;
+            border-bottom: 2px solid #FFD966;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .auth-form input {
+            background: #0E1422;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 0.9rem 1.2rem;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .auth-form input:focus {
+            border-color: #FFD966;
+        }
+
+        .auth-btn {
+            background: linear-gradient(135deg, #FFD966, #E6B422);
+            border: none;
+            color: #0B0F1C;
+            padding: 0.9rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .auth-btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.05);
+        }
+
+        .error-msg {
+            color: #DC3545;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .success-msg {
+            color: #4CAF50;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: none;
+        }
+
+        .mystery-card {
+            background: #131A2C;
+            border-radius: 32px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 200, 70, 0.2);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4);
+            transition: transform 0.25s ease;
+        }
+
+        .mystery-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 200, 70, 0.5);
+        }
+
+        .chest-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .product-name {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #FFD966, #E6B422);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-desc {
+            color: #9AA6BF;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .rate-table {
+            background: #0E1422;
+            border-radius: 20px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .rate-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+        .rate-row:last-child {
+            border-bottom: none;
+        }
+
+        .rate-percent {
+            color: #FFD966;
+            font-weight: 600;
+        }
+
+        .bill-notice {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(220, 53, 69, 0.05));
+            border: 2px solid #DC3545;
+            border-radius: 20px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { border-color: #DC3545; box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+            50% { border-color: #FF6B6B; box-shadow: 0 0 0 8px rgba(220, 53, 69, 0); }
+        }
+
+        .bill-notice-title {
+            color: #FF6B6B;
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .bill-notice-text {
+            color: #FFD966;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .bill-notice-warning {
+            color: #DC3545;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .open-btn {
+            background: linear-gradient(135deg, #FFD966, #E6B422);
+            border: none;
+            color: #0B0F1C;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .open-btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.05);
+        }
+
+        .open-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .open-count {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #8E9AAF;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #111827;
+            border-radius: 32px;
+            max-width: 500px;
+            width: 90%;
+            padding: 2rem;
+            border: 1px solid rgba(255, 200, 70, 0.4);
+            text-align: center;
+        }
+
+        .reward-glow {
+            font-size: 3.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .reward-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #FFD966;
+            margin: 0.5rem 0;
+        }
+
+        .info-row {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: left;
+        }
+
+        .code-area {
+            background: #0B0F1C;
+            padding: 1rem;
+            border-radius: 20px;
+            margin: 1rem 0;
+            border: 1px dashed #FFD966;
+        }
+
+        .discord-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #5865F2;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: all 0.2s;
+        }
+
+        .discord-link:hover {
+            background: #4752C4;
+            transform: scale(1.02);
+        }
+
+        .close-modal {
+            background: #2A3448;
+            border: none;
+            color: white;
+            padding: 0.7rem;
+            border-radius: 40px;
+            width: 100%;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .confirm-box {
+            background: #131A2C;
+            border-radius: 32px;
+            max-width: 380px;
+            width: 90%;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid #FFD966;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .confirm-yes, .confirm-no {
+            flex: 1;
+            padding: 0.7rem;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .confirm-yes {
+            background: #FFD966;
+            color: #0B0F1C;
+        }
+
+        .confirm-no {
+            background: #2A3448;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #5A6A85;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 500px) {
+            .product-name { font-size: 1.6rem; }
+            .chest-icon { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-content">
+        <div class="logo">
+            <h1>🇻🇳 Việt Nam City</h1>
+            <p>Túi Mù Free - Cơ hội nhận thần khí</p>
+        </div>
+        <div id="headerUserInfo" style="display: none;">
+            <div class="user-info">
+                <span id="headerUsername">User</span>
+                <span id="headerBadge" class="user-badge"></span>
+                <button class="logout-btn" id="logoutBtn">Đăng xuất</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Phần đăng nhập/đăng ký -->
+    <div id="authContainer" class="auth-container">
+        <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="login">Đăng nhập</button>
+            <button class="auth-tab" data-tab="register">Đăng ký</button>
+        </div>
+        
+        <div id="loginForm" class="auth-form">
+            <input type="text" id="loginUsername" placeholder="Tên đăng nhập">
+            <input type="password" id="loginPassword" placeholder="Mật khẩu">
+            <button class="auth-btn" id="doLoginBtn">Đăng nhập</button>
+            <div id="loginError" class="error-msg"></div>
+        </div>
+        
+        <div id="registerForm" class="auth-form" style="display: none;">
+            <input type="text" id="regUsername" placeholder="Tên đăng nhập">
+            <input type="password" id="regPassword" placeholder="Mật khẩu">
+            <button class="auth-btn" id="doRegisterBtn">Đăng ký</button>
+            <div id="regError" class="error-msg"></div>
+            <div id="regSuccess" class="success-msg"></div>
+        </div>
+    </div>
+
+    <!-- Phần nội dung chính -->
+    <div id="mainContent" class="main-content">
+        <div class="mystery-card">
+            <div class="chest-icon">🎁</div>
+            <div class="product-name">TÚI MÙ FREE</div>
+            <div class="product-desc">Mở túi miễn phí - Nhận ngay vật phẩm cực chất</div>
+            
+            <div class="rate-table">
+                <div class="rate-row">
+                    <span>💰 Ra Tiền</span>
+                    <span class="rate-percent">45%</span>
+                </div>
+                <div class="rate-row">
+                    <span>🤍 Bạch Long</span>
+                    <span class="rate-percent">25%</span>
+                </div>
+                <div class="rate-row">
+                    <span>🙏 Như Lai Thần Chưởng</span>
+                    <span class="rate-percent">15%</span>
+                </div>
+                <div class="rate-row">
+                    <span>⚡ Giáng Long</span>
+                    <span class="rate-percent">10%</span>
+                </div>
+                <div class="rate-row">
+                    <span>⚔️ Bá Vương Kích</span>
+                    <span class="rate-percent">5%</span>
+                </div>
+                <div class="rate-row">
+                    <span>🐉 Thanh Long Quyền</span>
+                    <span class="rate-percent">1%</span>
+                </div>
+            </div>
+
+            <div class="bill-notice">
+                <div class="bill-notice-title">📸 YÊU CẦU BẮT BUỘC 📸</div>
+                <div class="bill-notice-text">CHỤP LẠI BILL ĐƠN HÀNG VÀ GỬI CHO ADMIN XỬ LÝ</div>
+                <div class="bill-notice-warning">⚠️ KHÔNG CÓ ẢNH BILL = MẤT ĐƠN ⚠️</div>
+            </div>
+
+            <div id="limitInfo" class="limit-box" style="margin-bottom: 1rem;">
+                📦 Hôm nay đã mở: <span id="todayCount">0</span> / <span id="maxLimit">2</span> lần
+            </div>
+
+            <div id="timerDisplay" class="timer-box">
+                ⏰ Có thể mở ngay
+            </div>
+
+            <button class="open-btn" id="openBtn">✨ MỞ TÚI MIỄN PHÍ ✨</button>
+            <div class="open-count" id="openCountDisplay"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2025 Việt Nam City | Uy tín hàng đầu | <a href="https://discord.gg/zHCXUhpmSM" target="_blank" style="color:#FFD966;">💬 Liên hệ Discord</a>
+</footer>
+
+<!-- Modal kết quả -->
+<div id="resultModal" class="modal">
+    <div class="modal-content">
+        <div class="reward-glow" id="rewardEmoji">🎉</div>
+        <div class="reward-name" id="rewardName"></div>
+        <div class="info-row"><strong>📅 Thời gian:</strong> <span id="transTime"></span></div>
+        <div class="info-row"><strong>🔖 Mã giao dịch:</strong> <span id="transId"></span></div>
+        <div class="info-row"><strong>🎁 Phần thưởng:</strong> <span id="transReward"></span></div>
+        <div class="code-area">
+            🔑 <strong>Code / Acc:</strong><br>
+            <span style="color:#FFD966;">🔒 Liên Hệ Admin Để Nhận Code</span>
+        </div>
+        <div class="bill-notice" style="margin: 1rem 0; padding: 0.8rem;">
+            <div class="bill-notice-text" style="font-size: 0.8rem;">📸 ĐỪNG QUÊN CHỤP BILL ĐƠN HÀNG NÀY VÀ GỬI ADMIN</div>
+        </div>
+        <a href="https://discord.gg/zHCXUhpmSM" target="_blank" class="discord-link">
+            💬 Liên Hệ Discord (nhấn để chuyển app)
+        </a>
+        <button class="close-modal" onclick="closeModal()">Đóng</button>
+    </div>
+</div>
+
+<div id="confirmOverlay" class="confirm-overlay">
+    <div class="confirm-box">
+        <h3>❓ Xác nhận mở túi</h3>
+        <p style="margin: 1rem 0;">Bạn có chắc muốn mở <strong>Túi Mù Free</strong> không?</p>
+        <div class="confirm-buttons">
+            <button class="confirm-yes" id="confirmYesBtn">Có, mở ngay</button>
+            <button class="confirm-no" id="confirmNoBtn">Hủy</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== CẤU HÌNH ==========
+    const ADMIN_USERNAME = "adminshop";
+    const ADMIN_PASSWORD = "anhlabodeptrai";
+    const DAILY_LIMIT = 2;  // Member mỗi ngày được mở 2 lần
+
+    // Key lưu trữ
+    const USERS_KEY = "vietnam_city_users_v3";
+    const SESSION_KEY = "vietnam_city_session_v3";
+
+    // ========== KHỞI TẠO USER ==========
+    function initUsers() {
+        let users = localStorage.getItem(USERS_KEY);
+        if (!users) {
+            let defaultUsers = {
+                [ADMIN_USERNAME]: {
+                    password: ADMIN_PASSWORD,
+                    isAdmin: true,
+                    createdAt: new Date().toISOString(),
+                    totalOpens: 0,
+                    dailyOpens: {}  // Lưu lịch sử mở theo ngày
+                }
+            };
+            localStorage.setItem(USERS_KEY, JSON.stringify(defaultUsers));
+        } else {
+            let usersObj = JSON.parse(users);
+            if (!usersObj[ADMIN_USERNAME]) {
+                usersObj[ADMIN_USERNAME] = {
+                    password: ADMIN_PASSWORD,
+                    isAdmin: true,
+                    createdAt: new Date().toISOString(),
+                    totalOpens: 0,
+                    dailyOpens: {}
+                };
+                localStorage.setItem(USERS_KEY, JSON.stringify(usersObj));
+            }
+        }
+    }
+
+    // ========== LẤY SỐ LẦN MỞ HÔM NAY CỦA USER ==========
+    function getTodayOpenCount(username) {
+        let users = JSON.parse(localStorage.getItem(USERS_KEY));
+        let user = users[username];
+        if (!user) return 0;
+        
+        // Nếu là admin -> trả về 0 (không giới hạn)
+        if (user.isAdmin) return 0;
+        
+        let today = new Date().toLocaleDateString("vi-VN");
+        let dailyOpens = user.dailyOpens || {};
+        return dailyOpens[today] || 0;
+    }
+
+    // ========== TĂNG SỐ LẦN MỞ HÔM NAY ==========
+    function incrementTodayOpenCount(username) {
+        let users = JSON.parse(localStorage.getItem(USERS_KEY));
+        let user = users[username];
+        if (!user) return false;
+        
+        let today = new Date().toLocaleDateString("vi-VN");
+        
+        // Admin không bị giới hạn, vẫn tăng totalOpens nhưng không lưu daily
+        if (user.isAdmin) {
+            user.totalOpens = (user.totalOpens || 0) + 1;
+            localStorage.setItem(USERS_KEY, JSON.stringify(users));
+            return true;
+        }
+        
+        // Member: kiểm tra giới hạn
+        let dailyOpens = user.dailyOpens || {};
+        let currentCount = dailyOpens[today] || 0;
+        
+        if (currentCount >= DAILY_LIMIT) {
+            return false;
+        }
+        
+        dailyOpens[today] = currentCount + 1;
+        user.dailyOpens = dailyOpens;
+        user.totalOpens = (user.totalOpens || 0) + 1;
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        return true;
+    }
+
+    // ========== ĐĂNG KÝ ==========
+    function registerUser(username, password) {
+        let users = JSON.parse(localStorage.getItem(USERS_KEY));
+        
+        if (users[username]) {
+            return { success: false, error: "❌ Tên đăng nhập đã tồn tại!" };
+        }
+        if (username.length < 3) {
+            return { success: false, error: "❌ Tên đăng nhập phải có ít nhất 3 ký tự!" };
+        }
+        if (password.length < 3) {
+            return { success: false, error: "❌ Mật khẩu phải có ít nhất 3 ký tự!" };
+        }
+        
+        users[username] = {
+            password: password,
+            isAdmin: false,
+            createdAt: new Date().toISOString(),
+            totalOpens: 0,
+            dailyOpens: {}
+        };
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        return { success: true };
+    }
+
+    // ========== ĐĂNG NHẬP ==========
+    function loginUser(username, password) {
+        let users = JSON.parse(localStorage.getItem(USERS_KEY));
+        let user = users[username];
+        
+        if (!user) {
+            return { success: false, error: "❌ Tài khoản không tồn tại!" };
+        }
+        if (user.password !== password) {
+            return { success: false, error: "❌ Sai mật khẩu!" };
+        }
+        
+        let session = {
+            username: username,
+            isAdmin: user.isAdmin || false,
+            loginTime: Date.now()
+        };
+        localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+        return { success: true, isAdmin: session.isAdmin };
+    }
+
+    function getCurrentSession() {
+        let session = localStorage.getItem(SESSION_KEY);
+        if (session) return JSON.parse(session);
+        return null;
+    }
+
+    function logout() {
+        localStorage.removeItem(SESSION_KEY);
+        location.reload();
+    }
+
+    // ========== PHẦN THƯỞNG ==========
+    const REWARDS = [
+        { name: "💰 Ra Tiền", emoji: "💰", rate: 45 },
+        { name: "🤍 Bạch Long", emoji: "🤍", rate: 25 },
+        { name: "🙏 Như Lai Thần Chưởng", emoji: "🙏", rate: 15 },
+        { name: "⚡ Giáng Long", emoji: "⚡", rate: 10 },
+        { name: "⚔️ Bá Vương Kích", emoji: "⚔️", rate: 5 },
+        { name: "🐉 Thanh Long Quyền", emoji: "🐉", rate: 1 }
+    ];
+
+    function getRandomReward() {
+        let totalRate = REWARDS.reduce((sum, r) => sum + r.rate, 0);
+        let random = Math.random() * totalRate;
+        let cumulative = 0;
+        for (let reward of REWARDS) {
+            cumulative += reward.rate;
+            if (random < cumulative) return reward;
+        }
+        return REWARDS[0];
+    }
+
+    function generateTransactionId() {
+        return "VNC" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 5).toUpperCase();
+    }
+
+    function getCurrentTime() {
+        return new Date().toLocaleString("vi-VN");
+    }
+
+    // ========== UI ==========
+    function showResultModal(reward) {
+        document.getElementById("rewardEmoji").innerHTML = reward.emoji;
+        document.getElementById("rewardName").innerHTML = reward.name;
+        document.getElementById("transTime").innerText = getCurrentTime();
+        document.getElementById("transId").innerText = generateTransactionId();
+        document.getElementById("transReward").innerText = reward.name;
+        document.getElementById("resultModal").style.display = "flex";
+    }
+
+    function closeModal() {
+        document.getElementById("resultModal").style.display = "none";
+    }
+
+    // Cập nhật giao diện giới hạn
+    function updateLimitDisplay(username) {
+        let session = getCurrentSession();
+        if (!session) return;
+        
+        let isAdmin = session.isAdmin;
+        let todayCount = getTodayOpenCount(username);
+        
+        if (isAdmin) {
+            document.getElementById("todayCount").innerText = "∞";
+            document.getElementById("maxLimit").innerText = "∞";
+            document.getElementById("limitInfo").style.opacity = "0.7";
+            document.getElementById("openBtn").disabled = false;
+            document.getElementById("openBtn").textContent = "✨ MỞ TÚI MIỄN PHÍ ✨";
+        } else {
+            document.getElementById("todayCount").innerText = todayCount;
+            document.getElementById("maxLimit").innerText = DAILY_LIMIT;
+            document.getElementById("limitInfo").style.opacity = "1";
+            
+            if (todayCount >= DAILY_LIMIT) {
+                document.getElementById("openBtn").disabled = true;
+                document.getElementById("openBtn").textContent = "🚫 Hôm nay đã hết lượt! Quay lại ngày mai 🚫";
+            } else {
+                document.getElementById("openBtn").disabled = false;
+                document.getElementById("openBtn").textContent = "✨ MỞ TÚI MIỄN PHÍ ✨";
+            }
+        }
+        
+        // Cập nhật bộ đếm tổng số lần đã mở
+        let users = JSON.parse(localStorage.getItem(USERS_KEY));
+        let totalOpens = users[username]?.totalOpens || 0;
+        if (isAdmin) {
+            document.getElementById("openCountDisplay").innerHTML = `👑 Admin - Tổng đã mở: ${totalOpens} lần (không giới hạn)`;
+        } else {
+            let remaining = DAILY_LIMIT - todayCount;
+            document.getElementById("openCountDisplay").innerHTML = `📦 Hôm nay đã mở ${todayCount}/${DAILY_LIMIT} lần. Còn ${remaining} lượt`;
+        }
+    }
+
+    // Bộ đếm thời gian reset vào nửa đêm (chỉ hiển thị cho member)
+    function updateTimer() {
+        let session = getCurrentSession();
+        if (!session) return;
+        if (session.isAdmin) {
+            document.getElementById("timerDisplay").innerHTML = "👑 Admin - Không giới hạn số lần mở";
+            return;
+        }
+        
+        let now = new Date();
+        let midnight = new Date();
+        midnight.setHours(24, 0, 0, 0);
+        let timeLeft = midnight - now;
+        
+        if (timeLeft <= 0) {
+            document.getElementById("timerDisplay").innerHTML = "⏰ Có thể mở ngay!";
+            location.reload();
+            return;
+        }
+        
+        let hours = Math.floor(timeLeft / (1000 * 60 * 60));
+        let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        document.getElementById("timerDisplay").innerHTML = `⏰ Lượt mới sau: ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    // ========== MỞ TÚI ==========
+    let pendingOpen = false;
+
+    function attemptOpen() {
+        let session = getCurrentSession();
+        if (!session) return;
+        
+        // Kiểm tra giới hạn (chỉ member)
+        if (!session.isAdmin) {
+            let todayCount = getTodayOpenCount(session.username);
+            if (todayCount >= DAILY_LIMIT) {
+                alert(`❌ Hôm nay bạn đã mở ${DAILY_LIMIT}/${DAILY_LIMIT} lần rồi! Hãy quay lại vào ngày mai.`);
+                return;
+            }
+        }
+        
+        pendingOpen = true;
+        document.getElementById("confirmOverlay").style.display = "flex";
+    }
+
+    function confirmOpen() {
+        if (!pendingOpen) return;
+        
+        let session = getCurrentSession();
+        if (!session) {
+            closeConfirm();
+            pendingOpen = false;
+            return;
+        }
+        
+        // Kiểm tra lại giới hạn lần nữa
+        if (!session.isAdmin) {
+            let todayCount = getTodayOpenCount(session.username);
+            if (todayCount >= DAILY_LIMIT) {
+                alert(`❌ Hôm nay bạn đã hết lượt mở!`);
+                closeConfirm();
+                pendingOpen = false;
+                return;
+            }
+        }
+        
+        // Tăng số lần mở
+        let success = incrementTodayOpenCount(session.username);
+        if (!success && !session.isAdmin) {
+            alert("❌ Không thể mở túi! Bạn đã hết lượt hôm nay.");
+            closeConfirm();
+            pendingOpen = false;
+            return;
+        }
+        
+        const reward = getRandomReward();
+        showResultModal(reward);
+        
+        // Cập nhật giao diện
+        updateLimitDisplay(session.username);
+        
+        closeConfirm();
+        pendingOpen = false;
+    }
+
+    function closeConfirm() {
+        document.getElementById("confirmOverlay").style.display = "none";
+    }
+
+    // ========== KHỞI TẠO GIAO DIỆN ==========
+    function setupAuthTabs() {
+        const tabs = document.querySelectorAll('.auth-tab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                if (tab.dataset.tab === 'login') {
+                    loginForm.style.display = 'flex';
+                    registerForm.style.display = 'none';
+                    document.getElementById('loginError').innerText = '';
+                    document.getElementById('regError').innerText = '';
+                    document.getElementById('regSuccess').innerText = '';
+                } else {
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'flex';
+                    document.getElementById('loginError').innerText = '';
+                    document.getElementById('regError').innerText = '';
+                    document.getElementById('regSuccess').innerText = '';
+                }
+            });
+        });
+    }
+
+    function checkSessionAndShowUI() {
+        const session = getCurrentSession();
+        const authContainer = document.getElementById('authContainer');
+        const mainContent = document.getElementById('mainContent');
+        const headerUserInfo = document.getElementById('headerUserInfo');
+        
+        if (session) {
+            authContainer.style.display = 'none';
+            mainContent.style.display = 'block';
+            headerUserInfo.style.display = 'block';
+            
+            document.getElementById('headerUsername').innerText = session.username;
+            const badgeSpan = document.getElementById('headerBadge');
+            if (session.isAdmin) {
+                badgeSpan.innerText = '👑 ADMIN';
+            } else {
+                badgeSpan.innerText = '👤 Member';
+            }
+            
+            updateLimitDisplay(session.username);
+            setInterval(updateTimer, 1000);
+            updateTimer();
+        } else {
+            authContainer.style.display = 'block';
+            mainContent.style.display = 'none';
+            headerUserInfo.style.display = 'none';
+        }
+    }
+
+    // ========== SỰ KIỆN ==========
+    document.addEventListener('DOMContentLoaded', () => {
+        initUsers();
+        setupAuthTabs();
+        checkSessionAndShowUI();
+        
+        document.getElementById('doLoginBtn').addEventListener('click', () => {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            if (!username || !password) {
+                document.getElementById('loginError').innerText = "❌ Vui lòng nhập đầy đủ!";
+                return;
+            }
+            const result = loginUser(username, password);
+            if (result.success) {
+                location.reload();
+            } else {
+                document.getElementById('loginError').innerText = result.error;
+            }
+        });
+        
+        document.getElementById('doRegisterBtn').addEventListener('click', () => {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            if (!username || !password) {
+                document.getElementById('regError').innerText = "❌ Vui lòng nhập đầy đủ!";
+                document.getElementById('regSuccess').innerText = '';
+                return;
+            }
+            const result = registerUser(username, password);
+            if (result.success) {
+                document.getElementById('regError').innerText = '';
+                document.getElementById('regSuccess').innerText = "✅ Đăng ký thành công! Hãy đăng nhập.";
+                document.getElementById('regUsername').value = '';
+                document.getElementById('regPassword').value = '';
+            } else {
+                document.getElementById('regError').innerText = result.error;
+                document.getElementById('regSuccess').innerText = '';
+            }
+        });
+        
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('openBtn').addEventListener('click', attemptOpen);
+        document.getElementById('confirmYesBtn').addEventListener('click', confirmOpen);
+        document.getElementById('confirmNoBtn').addEventListener('click', () => {
+            closeConfirm();
+            pendingOpen = false;
+        });
+    });
+    
+    window.onclick = function(event) {
+        let modal = document.getElementById("resultModal");
+        if (event.target === modal) closeModal();
+        let confirmDiv = document.getElementById("confirmOverlay");
+        if (event.target === confirmDiv) {
+            closeConfirm();
+            pendingOpen = false;
+        }
+    };
+</script>
+</body>
+</html>
